@@ -30,6 +30,14 @@ emptyTree = error "emptyTree not implemented"
 tomtTräd :: Int 
 tomtTräd = error "prutt"
 
+
+-- ENDAST TEST
+enRandomFunktion:: Int  -> Int  -> Int 
+enRandomFunktion = error "finns ingen int"
+-- ENDAST TEST 28 APRIL
+
+
+
 get :: Ord a => a -> AATree a -> Maybe a
 get = error "get not implemented"
 
@@ -107,5 +115,5 @@ rightSub = error "rightSub not implemented"
 isBlack :: AATree a -> Bool
 isBlack = error "isBlack not implemented"
 
-
+-- TEST CREATING BRANCH TEST 28 APRIL
 --------------------------------------------------------------------------------
