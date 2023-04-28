@@ -26,6 +26,10 @@ data AATree a = TODO
 emptyTree :: AATree a
 emptyTree = error "emptyTree not implemented"
 
+--Testar lite saker ba
+tomtTräd :: Int 
+tomtTräd = error "prutt"
+
 get :: Ord a => a -> AATree a -> Maybe a
 get = error "get not implemented"
 
