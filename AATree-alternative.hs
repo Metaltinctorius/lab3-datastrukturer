@@ -26,10 +26,16 @@ data AATree a = TODO
 emptyTree :: AATree a
 emptyTree = error "emptyTree not implemented"
 
+--Testar lite saker ba
+tomtTräd :: Int 
+tomtTräd = error "prutt"
+
+
 -- ENDAST TEST
 enRandomFunktion:: Int  -> Int  -> Int 
 enRandomFunktion = error "finns ingen int"
 -- ENDAST TEST 28 APRIL
+
 
 
 --NY METOD--
