@@ -26,6 +26,12 @@ data AATree a = TODO
 emptyTree :: AATree a
 emptyTree = error "emptyTree not implemented"
 
+-- ENDAST TEST
+enRandomFunktion:: Int  -> Int  -> Int 
+enRandomFunktion = error "finns ingen int"
+-- ENDAST TEST 28 APRIL
+
+
 get :: Ord a => a -> AATree a -> Maybe a
 get = error "get not implemented"
 
