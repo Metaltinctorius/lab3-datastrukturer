@@ -32,6 +32,10 @@ enRandomFunktion = error "finns ingen int"
 -- ENDAST TEST 28 APRIL
 
 
+--NY METOD--
+--NYMETOD--
+
+
 get :: Ord a => a -> AATree a -> Maybe a
 get = error "get not implemented"
 
