@@ -19,8 +19,7 @@ module AATree (
 --Felix har varit 
 -- hejehejejeslvn
 
--- blvblblbvlbvlbdvf 
--- en grej tillß
+
 ---uhuybnuybuyb
 
 -- AA search trees
