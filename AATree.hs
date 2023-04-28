@@ -16,6 +16,9 @@ module AATree (
 
 --------------------------------------------------------------------------------
 
+--Felix har varit 
+-- hejehejejeslvn
+
 -- AA search trees
 data AATree a = TODO
   deriving (Eq, Show, Read)
