@@ -1,4 +1,4 @@
-{-# OPTIONS -Wall #-}
+  {-# OPTIONS -Wall #-}
 
 --------------------------------------------------------------------------------
 
@@ -15,22 +15,41 @@ module AATree (
  ) where
 
 --------------------------------------------------------------------------------
--- This is a test to try making branch in git
 
--- AA search trees
-data AATree a = TODO
+-- AA trees, represented by two constructors, Empty and Node
+-- Node has three arguments, a left subtree, value a, and a right subtree
+-- AA tree represented as BST tree
+data AATree a
+  = Empty
+  | Node Int (AATree a) a (AATree a)
   deriving (Eq, Show, Read)
 
 emptyTree :: AATree a
-emptyTree = error "emptyTree not implemented"
+emptyTree = Empty
 
+-- Is the otherwise case correct syntax?
 get :: Ord a => a -> AATree a -> Maybe a
-get = error "get not implemented"
+get _ Empty = Nothing
+get value (Node _ leftChild nodeValue rightChild)
+  | value     == nodeValue = Just nodeValue
+  | value     < nodeValue = get value leftChild
+  | otherwise = get value rightChild
 
--- You may find it helpful to define
---   split :: AATree a -> AATree a
---   skew  :: AATree a -> AATree a
--- and call these from insert.
+--testTree :: AATree a -> AATree a
+--testTree = Node 2 Empty Empty
+
+-- Need to make sure that it uses this function when encountering a four-node
+split :: AATree a -> AATree a
+split (Node xlvl a x (Node ylvl b y z)) = Node (ylvl+1) (Node xlvl a x b) y z
+split tree = tree
+
+-- guard case to ascertain that skew is only applied when a left child
+-- is added and has the same height as its parent
+skew :: AATree a -> AATree a
+skew (Node ylvl (Node xlvl a x b) y c)
+  | ylvl == xlvl = Node xlvl a x (Node ylvl b y c)
+skew tree = tree
+
 insert :: Ord a => a -> AATree a -> AATree a
 insert = error "insert not implemented"
 
@@ -44,7 +63,7 @@ height :: AATree a -> Int
 height = error "height not implemented"
 
 --------------------------------------------------------------------------------
--- Optional function
+-- Optional funct0ion
 
 remove :: Ord a => a -> AATree a -> AATree a
 remove = error "remove not implemented"
@@ -84,5 +103,6 @@ leftSub = error "leftSub not implemented"
 rightSub :: AATree a -> AATree a
 rightSub = error "rightSub not implemented"
 
+--add x tree = split (skew (tree x))
 --------------------------------------------------------------------------------
 
