@@ -38,9 +38,11 @@ get value (Node _ leftChild nodeValue rightChild)
 --testTree :: AATree a -> AATree a
 --testTree = Node 2 Empty Empty
 
--- Need to make sure that it uses this function when encountering a four-node
+-- guard to make sure to pattern match only when the insertion created
+-- a four-node, that is, when x y and z has the same level
 split :: AATree a -> AATree a
-split (Node xlvl a x (Node ylvl b y z)) = Node (ylvl+1) (Node xlvl a x b) y z
+split (Node xlvl a x (Node ylvl b y (Node zlvl c z d)))
+  |ylvl == xlvl && xlvl == zlvl =  Node (ylvl+1) (Node xlvl a x b) y (Node zlvl c z d)
 split tree = tree
 
 -- guard case to ascertain that skew is only applied when a left child
