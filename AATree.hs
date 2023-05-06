@@ -10,7 +10,7 @@ module AATree (
   inorder,       -- AATree a -> [a]
   remove,        -- Ord a => a -> AATree a -> AATree a
   size,          -- AATree a -> Int
-  height,        -- AATree a -> Int
+  bstHeight,        -- AATree a -> Int
   checkTree      -- Ord a => AATree a -> Bool
  ) where
 
@@ -46,7 +46,7 @@ split (Node xlvl a x (Node ylvl b y (Node zlvl c z d)))
 split tree = tree
 
 -- guard case to ascertain that skew is only applied when a left child
--- is added and has the same height as its parent
+-- is added and has the same as its parent
 skew :: AATree a -> AATree a
 skew (Node ylvl (Node xlvl a x b) y c)
   | ylvl == xlvl = Node xlvl a x (Node ylvl b y c)
@@ -67,21 +67,30 @@ insert value tree = case get value tree of --case distinction
 
 -- Test tree
 
-testTree :: AATree Int
-testTree = Node 2 (Node 1 Empty 10 (Node 1 (Node 1 Empty 4 Empty) 7 (Node 1 Empty 8 Empty))) 20 (Node 1 Empty 30 Empty)
---Node 2 (Node 1 Empty 10 (Node 1 6 7 8)) 20 (Node 1 Empty 30 Empty)
+tt :: AATree Int
+tt = Node 4 (Node 3 (Node 2 (Node 1 Empty 2 Empty) 3 (Node 1 Empty 4 (Node 1 Empty 5 Empty))) 6 (Node 2 (Node 1 Empty 7 Empty) 9 (Node 1 Empty 10 Empty))) 12 (Node 3 (Node 2 (Node 1 Empty 13 (Node 1 Empty 14 Empty)) 16 (Node 1 Empty 18 Empty)) 20 (Node 2 (Node 1 Empty 21 Empty) 24 (Node 1 Empty 26 Empty)))
 
-testTree' :: Num a => AATree a
-testTree' = Node 1 Empty 6 Empty
+tt' :: Num a => AATree a
+tt' = Node 2 (Node 1 Empty 2 Empty) 3 (Node 1 Empty 6 Empty)
 
 inorder :: AATree a -> [a]
-inorder = error "inorder not implemented"
+inorder Empty = []
+inorder (Node _ l root r) = inorder l ++ [root] ++ inorder r
 
 size :: AATree a -> Int
-size = error "size not implemented"
+size Empty = 0
+size (Node _ Empty _ Empty) = 1
+size (Node _ l _ r) = size l + size r + 1
 
 height :: AATree a -> Int
-height = error "height not implemented"
+height Empty = 0
+height (Node lvl _ _ _) = lvl
+
+-- Need to represent the BST height to main via the module, not the 2-3 tree height
+bstHeight :: AATree a -> Int
+bstHeight Empty = 0
+bstHeight (Node _ l _ r) = 1 + max (bstHeight l) (bstHeight r)
+
 
 -- Borrowed code, only for better visualization
 toDataTree :: Show a => AATree a -> T.Tree String
@@ -93,7 +102,7 @@ printTree = putStrLn . T.drawTree . toDataTree
 
 
 --------------------------------------------------------------------------------
--- Optional funct0ion
+-- Optional function
 
 remove :: Ord a => a -> AATree a -> AATree a
 remove = error "remove not implemented"
@@ -112,7 +121,28 @@ checkTree root =
 
 -- True if the given list is ordered
 isSorted :: Ord a => [a] -> Bool
-isSorted = error "isSorted not implemented"
+isSorted [] = True
+isSorted [_] = True
+isSorted (x:y:xs) = x < y && isSorted (y:xs)
+
+leftChildOK :: Ord a => AATree a -> Bool
+leftChildOK Empty = True
+leftChildOK n = heightDiff == 1
+  where
+    heightDiff = height n - height (leftSub n)
+
+rightChildOK :: Ord a => AATree a -> Bool
+rightChildOK Empty = True
+rightChildOK n = heightDiff == 0 || heightDiff == 1
+  where
+    heightDiff = height n - height (rightSub n)
+
+rightGrandChildOK :: Ord a => AATree a -> Bool
+rightGrandChildOK Empty = True
+rightGrandChildOK n = heightDiff == 1 && heightDiff' == 0 || heightDiff' == 1
+  where
+    heightDiff' = height n - height (rightSub n)
+    heightDiff = height n - height (rightSub (rightSub n))
 
 -- Check if the invariant is true for a single AA node
 -- You may want to write this as a conjunction e.g.
@@ -121,16 +151,22 @@ isSorted = error "isSorted not implemented"
 --     rightChildOK node &&
 --     rightGrandchildOK node
 -- where each conjunct checks one aspect of the invariant
-checkLevels :: AATree a -> Bool
-checkLevels = error "checkLevels not implemented"
+
+
+checkLevels :: Ord a => AATree a -> Bool
+checkLevels node = leftChildOK node && rightChildOK node && rightGrandChildOK node
 
 isEmpty :: AATree a -> Bool
-isEmpty = error "isEmpty not implemented"
+isEmpty Empty = True
+isEmpty _ = False
 
 leftSub :: AATree a -> AATree a
-leftSub = error "leftSub not implemented"
+leftSub Empty = Empty
+leftSub (Node _ left _ _) = left
 
 rightSub :: AATree a -> AATree a
-rightSub = error "rightSub not implemented"
+rightSub Empty = Empty
+rightSub (Node _ _ _ right) = right
+
 
 --------------------------------------------------------------------------------
